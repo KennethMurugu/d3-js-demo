@@ -1,8 +1,2 @@
-# Web Boilerplate
-A simple boilerplate for me when making websites. :)
-
-## What's inside?
-- Jquery
-- Bootrap
-- Fontawesome
-d3.js Demo
+# d3.js Demo
+Demo as I learn d3.js
