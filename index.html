@@ -71,6 +71,13 @@
 			.attr('stroke', 'blue')
 			.attr('stroke-width', '3');
 
+		//Ordinal scales for non-numerical data
+		//Time scales
+		const life = d3.scaleTime()
+			.domain([new Date(1996,6,18), new Date()])
+			.range([0, 500]);
+		console.log("life: " + life(new Date(2006, 6, 18)));
+
 
 
 	</script>
