@@ -20,7 +20,8 @@
     <style>
     	#chart
     	{
-    		height: 200px;
+    		width: 600px;
+    		height: 500px;
     		width: 100%;
     	}
         #chart div
@@ -34,87 +35,42 @@
 	<svg id="chart">
 		
 	</svg>
-	<svg>
-		<path d="M0,0L0,100L100,100L100,0Z" fill="#000" stroke="#e3e3e3" stroke-width="3"></path>
-		<circle cx="150" cy="50" r="45" fill="blue" stroke="#e3e3e3" stroke-width="3"></circle>
-	</svg>
 	<script type="text/javascript">
-        console.log(d3);
-        const colorMap = d3.interpolateRgb(
-        	d3.rgb('#d6e685'),
-  			d3.rgb('#1e6823')
-  		);
-		
-		d3.select('#chart')
-            .selectAll("div")
-            .data([0.33, 0.20, 0, .9, .34])
-            .enter()
-            .append("div")
-            // .style("height", function (d) {
-            // 	return d + "px";
-            // })
-            .style("width", "20px")
-            .style("height", "20px")
-            .style("background-color", d => {
-            	return d == 0? "#e3e3e3" : colorMap(d);
-            });
+		console.log(d3);
+        /* Scales */
+        const data = [
+			{ x: 0, y: 0 },
+			{ x: 4, y: 75 },
+			{ x: 25, y: 15 },
+			{ x: 50, y: 33 },
+			{ x: 73, y: 18},
+			{ x: 90, y: 10 }
+		];
+		const width = 600, height = 500;
+		const xMax = d3.max(data, (d) => d.x);
+		const yMax = d3.max(data, (d) => d.y);
 
-          const data = [{
-			  label: "7am",
-			  sales: 20
-			},{
-			  label: "8am",
-			  sales: 12
-			}, {
-			  label: "9am",
-			  sales: 8
-			}, {
-			  label: "10am",
-			  sales: 27
-			}];
+		var xScale = d3.scaleLinear()
+			.domain([0, xMax]) //input domain
+			.range([0, width]); //output range
 
-			//add g elements to #chart
-			var g = d3.select('#chart')
-				.selectAll("g")
-				.data(data)
-				.enter()
-				.append('g');
-			//append circle and text to g
-			g.append('circle')
-				.attr("cy", 100)
-				.attr('cx', (d, i)=>{
-					console.log("i:"+ i );
-					return (i+1) * 40;
-				})
-				.attr('fill', 'red')
-				.attr('r', (d) => d.sales );
-  			g.append('text')
-  				.attr("y", 150)
-				.attr('x', (d, i) => {
-					return (i+1) * 30;
-				})
-				.text((d) => d.label)
-				.style('color', 'green');
-        	
-        	const line_data = [
-			  { x: 0, y: 30 },
-			  { x: 50, y: 20 },
-			  { x: 100, y: 40 },
-			  { x: 150, y: 80 },
-			  { x: 200, y: 95 }
-			];
+		var yScale = d3.scaleLinear()
+			.domain([0, yMax]) //input domain
+			.range([height, 0]); //output range
 
-			const createLine = d3.line()
-				.x((d) => d.x)
-				.y((d) => 100 - d.y);
-				// .interpolate('linear');
+		// console.log(xScale(25));
+		//Generate line using data scaled to fit in 600x500 space
+		var createLine = d3.line()
+			.x((d) => xScale(d.x))
+			.y((d) => yScale(d.y));
 
-			d3.select("#chart")
-				.append("path")
-				.attr('stroke-width', '3')
-				.attr('stroke', 'purple')
-				.attr('fill', 'none')
-				.attr('d', createLine(line_data));
+		d3.select("#chart")
+			.append('path')
+			.attr('d', createLine(data))
+			.attr('fill', 'none')
+			.attr('stroke', 'blue')
+			.attr('stroke-width', '3');
+
 
 
 	</script>
