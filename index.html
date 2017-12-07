@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Legibra</title>
+	<title>D3</title>
 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
 
 	<!-- Vendor CSS -->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
@@ -10,12 +11,112 @@
 	<!-- Vendor Scripts -->
 	<script type="text/javascript" src="vendor/jquery/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="vendor/d3/d3.js"></script>
 	<!-- My CSS -->
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<!-- My Scripts -->
-	<script type="text/javascript" src="js/main.js"></script>
+<!--	<script type="text/javascript" src="js/main.js"></script>-->
+    
+    <style>
+    	#chart
+    	{
+    		height: 200px;
+    		width: 100%;
+    	}
+        #chart div
+        {
+            display: inline-block;
+            margin-right: 20px;
+        }
+    </style>
 </head>
 <body>
+	<svg id="chart">
+		
+	</svg>
+	<svg>
+		<path d="M0,0L0,100L100,100L100,0Z" fill="#000" stroke="#e3e3e3" stroke-width="3"></path>
+		<circle cx="150" cy="50" r="45" fill="blue" stroke="#e3e3e3" stroke-width="3"></circle>
+	</svg>
+	<script type="text/javascript">
+        console.log(d3);
+        const colorMap = d3.interpolateRgb(
+        	d3.rgb('#d6e685'),
+  			d3.rgb('#1e6823')
+  		);
+		
+		d3.select('#chart')
+            .selectAll("div")
+            .data([0.33, 0.20, 0, .9, .34])
+            .enter()
+            .append("div")
+            // .style("height", function (d) {
+            // 	return d + "px";
+            // })
+            .style("width", "20px")
+            .style("height", "20px")
+            .style("background-color", d => {
+            	return d == 0? "#e3e3e3" : colorMap(d);
+            });
 
+          const data = [{
+			  label: "7am",
+			  sales: 20
+			},{
+			  label: "8am",
+			  sales: 12
+			}, {
+			  label: "9am",
+			  sales: 8
+			}, {
+			  label: "10am",
+			  sales: 27
+			}];
+
+			//add g elements to #chart
+			var g = d3.select('#chart')
+				.selectAll("g")
+				.data(data)
+				.enter()
+				.append('g');
+			//append circle and text to g
+			g.append('circle')
+				.attr("cy", 100)
+				.attr('cx', (d, i)=>{
+					console.log("i:"+ i );
+					return (i+1) * 40;
+				})
+				.attr('fill', 'red')
+				.attr('r', (d) => d.sales );
+  			g.append('text')
+  				.attr("y", 150)
+				.attr('x', (d, i) => {
+					return (i+1) * 30;
+				})
+				.text((d) => d.label)
+				.style('color', 'green');
+        	
+        	const line_data = [
+			  { x: 0, y: 30 },
+			  { x: 50, y: 20 },
+			  { x: 100, y: 40 },
+			  { x: 150, y: 80 },
+			  { x: 200, y: 95 }
+			];
+
+			const createLine = d3.line()
+				.x((d) => d.x)
+				.y((d) => 100 - d.y);
+				// .interpolate('linear');
+
+			d3.select("#chart")
+				.append("path")
+				.attr('stroke-width', '3')
+				.attr('stroke', 'purple')
+				.attr('fill', 'none')
+				.attr('d', createLine(line_data));
+
+
+	</script>
 </body>
 </html>
